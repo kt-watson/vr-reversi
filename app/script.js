@@ -42,6 +42,10 @@ function init() {
     const renderer = new THREE.WebGLRenderer({
         canvas: document.querySelector('#canvas')
     });
+
+    // レンダラーのWebVR設定を有効にする
+    renderer.xr.enabled = true;
+
     // ウィンドウサイズ設定
     width = document.getElementById('main_canvas').getBoundingClientRect().width;
     height = document.getElementById('main_canvas').getBoundingClientRect().height;
@@ -127,6 +131,9 @@ function init() {
     // シーンに追加
     scene.add(light);
 
+
+    document.body.appendChild(WEBVR.createButton(renderer));
+
     // 初回実行
     tick();
 
@@ -185,7 +192,9 @@ function init() {
             }
         renderer.render(scene, camera);
         draw();
-        requestAnimationFrame(tick);
+        //requestAnimationFrame(tick);
+        // レンダラーにループ関数を登録
+        renderer.setAnimationLoop(tick);
     }
 
     document.addEventListener( 'mousedown', clickPosition, false );
