@@ -127,7 +127,9 @@ var WEBVR = {
 
 		var isWebXR = false;
 
-		if ( 'xr' in navigator ) {
+		//if ( 'xr' in navigator ) {
+
+		if ( 'xr' in navigator && navigator.xr.requestDevice ) {
 
 			isWebXR = true;
 
