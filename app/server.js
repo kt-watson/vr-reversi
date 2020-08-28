@@ -11,4 +11,4 @@ require('http').createServer(function (request, response) {
         //
         file.serve(request, response);
     }).resume();
-}).listen(8080);
+}).listen(8080,'0.0.0.0');
