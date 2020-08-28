@@ -2,28 +2,26 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>3d-reversi</title>
-    <script src="./three.min.js"></script>
-    <script src="./OrbitControls.js"></script>
-    <script src="./GLTFLoader.js"></script>
-    <script src="./WebVR.js"></script>
+    <title>vr-reversi</title>
+    <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
     <script>
     let script = document.createElement('script');
-    script.src = "./script.js?" + (new Date).getTime();
+    script.src = "./reversi.js?" + (new Date).getTime();
     document.head.appendChild(script);
     </script>
     <meta http-equiv="Cache-Control" content="no-cache">
 </head>
 <body>
-<div id="main_canvas" style='width:100vw;height:100vh'>
-    <canvas id="canvas" width="100%" height="100%"></canvas>
-    <canvas id="canvas2d" width="auto" height="auto" style="position:fixed; top:0px; left:0px;z-index: 100; background-color:rgba(0,0,0,0);"></canvas>
-    <div id="input" style="width:100%;height:100%;position:fixed; top:10px; left:50vw;z-index: 110; background-color:rgba(0,0,0,0);">
-        <input type="button" value="打つ" id="koma-submit" style="width:50px;height:30px">
-        <input type="button" value="パス" id="pass-submit" style="width:50px;height:30px">
-        <input type="button" value="戻す" id="undo" style="width:50px;height:30px">
-        <input type="checkbox" id="taisen" name="taisen"><label style="color:white;font-size: 1pc;" for="taisen">コンピュータ(白)</label>
-    </div>
-</div>
+    <a-scene>
+        <a-entity camera look-controls position="0 2 5"></a-entity>
+          
+          <a-entity id="box" cursor-listener geometry="primitive: box" material="color: blue"></a-entity>
+        <a-sky color="#ECECEC"></a-sky>
+        <a-assets>
+            <a-asset-item id="board" src="./board.glb" response-type="arraybuffer"></a-asset-item>
+        </a-assets>
+        <a-entity gltf-model="#board"></a-entity>
+
+    </a-scene>
 </body>
 </html>
