@@ -1,8 +1,8 @@
 window.addEventListener('DOMContentLoaded', init);
 
 const boardMap = {
-    x:[-440,-315,-190,0.1,0.1,185,310,435],
-    z:[-430,-305,-180,0.1,0.1,195,320,445],
+    x:[-4,-3,-2,-1.2,1.2,2,3,4],
+    z:[-4,-3,-2,-1.2,1.2,2,3,4],
 }
 
 const turnInfo = {
@@ -10,10 +10,8 @@ const turnInfo = {
     "-1":"白"
 }
 
-
-
 // シーンを取得
-const scene = document.querySelector('a-entity').object3D;
+const scene = document.querySelector('a-scene').object3D;
 
 let randomplayer = false;
 
@@ -47,24 +45,6 @@ function init() {
     const boardurl = './board.glb';
     const komaurl = './koma.glb';
 
-    // let model = null;
-    // loader.load(
-    //     boardurl,
-    //     function (gltf) {
-    //         model = gltf.scene;
-    //         // model.name = "model_with_cloth";
-    //         // model.scale.set(50.0, 50.0, 50.0);
-    //         model.position.set(0, 0, 0);
-    //         scene.add(gltf.scene);
-    //         console.log(model);
-    //         // model["test"] = 100;
-    //     },
-    //     function (error) {
-    //         console.log('An error happened');
-    //         console.log(error);
-    //     }
-    // );
-
     //駒グループ作成
     const komagroup = new THREE.Group();
     komagroup.name = "komagroup";
@@ -76,8 +56,8 @@ function init() {
                 komaurl,
                 function (gltf) {
                     gltf.scene.name = "koma" + row + col;
-                    //gltf.scene.scale.set(19.0, 19.0, 19.0);
-                    gltf.scene.position.set(boardMap.x[col], 40,boardMap.z[row]);
+                    gltf.scene.scale.set(0.3, 0.3, 0.3);
+                    gltf.scene.position.set(boardMap.x[col], 0.7,boardMap.z[row]);
                     //gltf.scene.position.set(boardMap.z[row], 40,boardMap.x[col]);
                     if(board[row][col] === 0){
                         gltf.scene.visible = false;

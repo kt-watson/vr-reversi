@@ -17,13 +17,12 @@
         <a-entity id="rig" position="0 10 30">
             <a-camera id="camera"></a-camera>
         </a-entity>
-          
-        <a-entity id="box" cursor-listener geometry="primitive: box" material="color: blue"></a-entity>
         <a-sky color="#ECECEC"></a-sky>
         <a-assets>
             <a-asset-item id="board" src="./board.glb" response-type="arraybuffer"></a-asset-item>
         </a-assets>
         <a-entity gltf-model="#board"></a-entity>
+        <a-entity id="koma"></a-entity>
         <a-assets>
             <a-asset-item id="robot-kun" src="./robot_kun_sai.glb" response-type="arraybuffer"></a-asset-item>
         </a-assets>
