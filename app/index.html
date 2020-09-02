@@ -16,7 +16,7 @@
         <!--<a-entity camera look-controls position="0 10 30"></a-entity>-->
         <a-entity id="rig" position="0 20 30">
             <a-entity id="camera" camera look-controls>
-                <a-entity cursor="fuse: true; fuseTimeout: 500"
+                <a-entity cursor="fuse: true; fuseTimeout: 1000"
                 position="0 0 -1"
                 geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
                 material="color: black; shader: flat">
@@ -28,9 +28,75 @@
             <a-asset-item id="board" src="./board.glb" response-type="arraybuffer"></a-asset-item>
         </a-assets>
         <a-entity gltf-model="#board"></a-entity>
-        <a-entity id="koma"></a-entity>
+        <a-entity id="komagroup">
+            <a-entity koma-listener gltf-model="#koma" id="koma00"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma01"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma02"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma03"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma04"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma05"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma06"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma07"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma10"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma11"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma12"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma13"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma14"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma15"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma16"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma17"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma20"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma21"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma22"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma23"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma24"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma25"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma26"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma27"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma30"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma31"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma32"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma33"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma34"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma35"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma36"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma37"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma40"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma41"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma42"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma43"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma44"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma45"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma46"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma47"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma50"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma51"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma52"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma53"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma54"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma55"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma56"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma57"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma60"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma61"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma62"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma63"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma64"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma65"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma66"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma67"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma70"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma71"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma72"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma73"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma74"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma75"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma76"></a-entity>
+            <a-entity koma-listener gltf-model="#koma" id="koma77"></a-entity>
+        </a-entity>
         <a-assets>
             <a-asset-item id="robot-kun" src="./robot_kun_sai.glb" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="koma" src="./koma.glb" response-type="arraybuffer"></a-asset-item>
         </a-assets>
         <a-entity gltf-model="#robot-kun" position="-0.7 -2.669 -17.25" scale="3 3 3"></a-entity>
         <a-entity id="box" cursor-listener geometry="primitive: box" material="color: blue" position="1 1 1"></a-entity>

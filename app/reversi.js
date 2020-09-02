@@ -1,43 +1,8 @@
-window.addEventListener('DOMContentLoaded', init);
-
-
-function loop() {
-    alert("gamepad connected");
-    console.log("gamepad connected")
-    requestAnimationFrame(loop);                     // loop 関数を繰り返す
-    var pad = navigator.getGamepads();                  // ゲームパッドの状態を取得
-    // データの表示（1個めのゲームパッド（pad[0]）のみ表示）
-    var log = document.getElementById("log");           // データ表示用の div 要素を取得
-    log.innerHTML = "a0: " + pad[0].axes[0] + "<br>"    // 左アナログ（横持ちで右が+、縦持ちで下が+）
-                  + "a1: " + pad[0].axes[1] + "<br>"    // 左アナログ（横持ちで下が+、縦持ちで左が+）
-                  + "a2: " + pad[0].axes[2] + "<br>"    // 右アナログ（横持ちで右が+、縦持ちで下が+）
-                  + "a3: " + pad[0].axes[3] + "<br>"    // 右アナログ（横持ちで下が+、縦持ちで左が+）
-                  // ボタンは .value で 0/1、.pressed で true/false が得られる
-                  + "b0: " + pad[0].buttons[0].value + "<br>"    // A
-                  + "b1: " + pad[0].buttons[1].value + "<br>"    // B
-                  + "b2: " + pad[0].buttons[2].value + "<br>"    // X
-                  + "b3: " + pad[0].buttons[3].value + "<br>"    // Y
-                  + "b4: " + pad[0].buttons[4].value + "<br>"    // L1
-                  + "b5: " + pad[0].buttons[5].value + "<br>"    // R1
-                  + "b6: " + pad[0].buttons[6].value + "<br>"    // L2
-                  + "b7: " + pad[0].buttons[7].value + "<br>"    // R2
-                  + "b8: " + pad[0].buttons[8].value + "<br>"    // Select
-                  + "b9: " + pad[0].buttons[9].value + "<br>"    // Start
-                  + "b10: " + pad[0].buttons[10].value + "<br>"  // L3
-                  + "b11: " + pad[0].buttons[11].value + "<br>"  // R3
-                  + "b12: " + pad[0].buttons[12].value + "<br>"  // 十字キー 上
-                  + "b13: " + pad[0].buttons[13].value + "<br>"  // 十字キー 下
-                  + "b14: " + pad[0].buttons[14].value + "<br>"  // 十字キー 左
-                  + "b15: " + pad[0].buttons[15].value + "<br>"  // 十字キー 右
-                  + "b16: " + pad[0].buttons[16].value + "<br>"; // Home
-}
- 
-window.addEventListener("gamepadconnected", loop);  // ゲームパッドが接続されたら loop 開始
-if(window.ongamepadconnected) { loop(); }          // Chrome はイベントが起きないので直接 loop 開始
+window.addEventListener('load', init);
 
 const boardMap = {
-    x:[-4,-3,-2,-1.2,1.2,2,3,4],
-    z:[-4,-3,-2,-1.2,1.2,2,3,4],
+    x:[-8.7,-6.2,-3.9,-1.2,1.2,3.9,6.2,8.7],
+    z:[-8.7,-6.2,-3.9,-1.2,1.2,3.9,6.2,8.7],
 }
 
 const turnInfo = {
@@ -68,47 +33,32 @@ let reverseKomas = [];
 let counter = 1;
 let gameFinished = false;
 
-(function () {
-    init();
-}());
-
-
 function init() {
 
-    // Load GLTF or GLB
-    const loader = new THREE.GLTFLoader();
-    const boardurl = './board.glb';
-    const komaurl = './koma.glb';
+    console.log("init start")
+    AFRAME.registerComponent('koma-listener', {
+        init: function () {
+          this.el.addEventListener('click', function (evt) {
+            let komaId = evt.detail.intersection.object.el.id
+            console.log('koma clicked at',komaId);
+            document.getElementById(komaId).object3D.visible = true;
+          });
+        }
+      });
 
-    //駒グループ作成
-    const komagroup = new THREE.Group();
-    komagroup.name = "komagroup";
-    scene.add(komagroup);
 
     for(let row = 0; row < 8; row++){
         for(let col = 0; col < 8; col++){
-            loader.load(
-                komaurl,
-                function (gltf) {
-                    gltf.scene.name = "koma" + row + col;
-                    gltf.scene.scale.set(0.3, 0.3, 0.3);
-                    gltf.scene.position.set(boardMap.x[col], 0.7,boardMap.z[row]);
-                    //gltf.scene.position.set(boardMap.z[row], 40,boardMap.x[col]);
-                    if(board[row][col] === 0){
-                        gltf.scene.visible = false;
-                    }
-                    if(board[row][col] === -1){
-                        gltf.scene.rotation.set(0, 0, Math.PI);
-                    }
-                    komagroup.add(gltf.scene);
-        
-                    // model["test"] = 100;
-                },
-                function (error) {
-                    console.log('An error happened');
-                    console.log(error);
-                }
-            );
+            //aframeの要素として一度追加
+            var koma = document.getElementById("koma" + row + col).object3D;
+            koma.scale.set(0.3, 0.3, 0.3);
+            koma.position.set(boardMap.x[col], 0.7,boardMap.z[row]);
+            if(board[row][col] === 0){
+                koma.visible = false;
+            }
+            if(board[row][col] === -1){
+                koma.rotation.set(0, 0, Math.PI);
+            }
         }
     }
 
@@ -133,112 +83,110 @@ function init() {
     }
   });
 
-    // 初回実行
-    tick();
+}
 
-    async function tick() {
+async function tick() {
 
-        //駒をひっくり返すアニメーション
-        if (reverseKomas.length > 0){
-            for (const k of reverseKomas){
-                scene.getObjectByName(k).rotation.z += Math.PI / 30;
-                }
-                if (counter === 30){
-                    for(let row = 0; row < 8; row++){
-                        for(let col = 0; col < 8; col++){
-                            let koma = scene.getObjectByName("koma" + row + col);
-                            if(board[row][col] === 1){
-                                koma.rotation.set(0, 0, 0);
-                            }
-                            if(board[row][col] === -1){
-                                koma.rotation.set(0, 0, Math.PI);
-                            }
-                        }
-                    }
-                reverseKomas = [];
-                counter = 1;
-                //戦況判断
-                if(countStone(1) + countStone(-1) === 64) gameFinished = true;
-                if(countStone(1) === 0 || countStone(-1) === 0) gameFinished = true;
-
-                //ランダムと対戦の場合は次の駒をランダムに置く
-                if(randomplayer && turn === -1){
-                    let next_steps = await searchValidKoma(-1);
-                    if (next_steps.length > 0){
-                    let utite =  next_steps[Math.floor(Math.random() * next_steps.length)];
-                    console.log(utite);
-                    reverseKomas = await searchReverseKoma(Number(utite[4]),Number(utite[5]),turn,board);
-                    if (reverseKomas.length === 0){
-                        //alert("そこには打てません");
-                        event.preventDefault();
-                    }else{
-                        if(turn === -1){
-                            scene.getObjectByName(utite).rotation.set(0, 0, Math.PI);
-                        }
-                        scene.getObjectByName(utite).visible = true;
-                        updateHistory(Number(utite[4]),Number(utite[5]),turn,board);
-                        board[Number(utite[4])][Number(utite[5])] = turn;
-                        for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
-                        turn = -1 * turn;
-                    }
-                  }
-                }
-            }counter += 1
+    //駒をひっくり返すアニメーション
+    if (reverseKomas.length > 0){
+        for (const k of reverseKomas){
+            scene.getObjectByName(k).rotation.z += Math.PI / 30;
             }
+            if (counter === 30){
+                for(let row = 0; row < 8; row++){
+                    for(let col = 0; col < 8; col++){
+                        let koma = scene.getObjectByName("koma" + row + col);
+                        if(board[row][col] === 1){
+                            koma.rotation.set(0, 0, 0);
+                        }
+                        if(board[row][col] === -1){
+                            koma.rotation.set(0, 0, Math.PI);
+                        }
+                    }
+                }
+            reverseKomas = [];
+            counter = 1;
+            //戦況判断
+            if(countStone(1) + countStone(-1) === 64) gameFinished = true;
+            if(countStone(1) === 0 || countStone(-1) === 0) gameFinished = true;
 
-    }
-    //document.addEventListener( 'mousedown', clickPosition, false );
-
-    // document.addEventListener('touchstart', function(event) {
-    //     // touchstar以降のイベントを発生させないように
-    //     event.preventDefault();
-    //     clickPosition(event);  
-    //   },{ passive: false });
-
-    async function clickPosition( event) {
-        const element = event.currentTarget.activeElement;
-        // canvas要素上のXY座標
-        if(event.type === 'mousedown'){
-            x = event.clientX - element.offsetLeft;
-            y = event.clientY - element.offsetTop;            
-        }else{
-            x = event.changedTouches[0].pageX - element.offsetLeft;
-            y = event.changedTouches[0].pageY - element.offsetTop; 
+            //ランダムと対戦の場合は次の駒をランダムに置く
+            if(randomplayer && turn === -1){
+                let next_steps = await searchValidKoma(-1);
+                if (next_steps.length > 0){
+                let utite =  next_steps[Math.floor(Math.random() * next_steps.length)];
+                console.log(utite);
+                reverseKomas = await searchReverseKoma(Number(utite[4]),Number(utite[5]),turn,board);
+                if (reverseKomas.length === 0){
+                    //alert("そこには打てません");
+                    event.preventDefault();
+                }else{
+                    if(turn === -1){
+                        scene.getObjectByName(utite).rotation.set(0, 0, Math.PI);
+                    }
+                    scene.getObjectByName(utite).visible = true;
+                    updateHistory(Number(utite[4]),Number(utite[5]),turn,board);
+                    board[Number(utite[4])][Number(utite[5])] = turn;
+                    for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
+                    turn = -1 * turn;
+                }
+              }
+            }
+        }counter += 1
         }
 
-        // canvas要素の幅・高さ
-        const w = element.offsetWidth;
-        const h = element.offsetHeight;
-         
-        // マウスクリック位置を正規化
-        var mouse = new THREE.Vector2();
-        mouse.x = ( x / w ) * 2 - 1;
-        mouse.y = -( y / h ) * 2 + 1;
-         
-        // Raycasterインスタンス作成
-        var raycaster = new THREE.Raycaster();
-        // 取得したX、Y座標でrayの位置を更新
-        raycaster.setFromCamera( mouse, camera );
-        // オブジェクトの取得
-        var intersects = raycaster.intersectObjects( scene.getObjectByName("komagroup").children,true);
-        //var intersects = raycaster.intersectObjects( scene.children,true);
-        
-        if(intersects.length > 0){
-            let koma = intersects[0].object.parent.name;
-            reverseKomas = await searchReverseKoma(Number(koma[4]),Number(koma[5]),turn,board);
-            if (reverseKomas.length === 0){
-                //alert("そこには打てません");
-                event.preventDefault();
-            }else{
-                if(turn === -1){
-                    scene.getObjectByName(intersects[0].object.parent.name).rotation.set(0, 0, Math.PI);
-                }
-                scene.getObjectByName(intersects[0].object.parent.name).visible = true;
-                updateHistory(Number(koma[4]),Number(koma[5]),turn,board);
-                board[Number(koma[4])][Number(koma[5])] = turn;
-                for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
-                turn = -1 * turn;
+}
+//document.addEventListener( 'mousedown', clickPosition, false );
+
+// document.addEventListener('touchstart', function(event) {
+//     // touchstar以降のイベントを発生させないように
+//     event.preventDefault();
+//     clickPosition(event);  
+//   },{ passive: false });
+
+async function clickPosition( event) {
+    const element = event.currentTarget.activeElement;
+    // canvas要素上のXY座標
+    if(event.type === 'mousedown'){
+        x = event.clientX - element.offsetLeft;
+        y = event.clientY - element.offsetTop;            
+    }else{
+        x = event.changedTouches[0].pageX - element.offsetLeft;
+        y = event.changedTouches[0].pageY - element.offsetTop; 
+    }
+
+    // canvas要素の幅・高さ
+    const w = element.offsetWidth;
+    const h = element.offsetHeight;
+     
+    // マウスクリック位置を正規化
+    var mouse = new THREE.Vector2();
+    mouse.x = ( x / w ) * 2 - 1;
+    mouse.y = -( y / h ) * 2 + 1;
+     
+    // Raycasterインスタンス作成
+    var raycaster = new THREE.Raycaster();
+    // 取得したX、Y座標でrayの位置を更新
+    raycaster.setFromCamera( mouse, camera );
+    // オブジェクトの取得
+    var intersects = raycaster.intersectObjects( scene.getObjectByName("komagroup").children,true);
+    //var intersects = raycaster.intersectObjects( scene.children,true);
+    
+    if(intersects.length > 0){
+        let koma = intersects[0].object.parent.name;
+        reverseKomas = await searchReverseKoma(Number(koma[4]),Number(koma[5]),turn,board);
+        if (reverseKomas.length === 0){
+            //alert("そこには打てません");
+            event.preventDefault();
+        }else{
+            if(turn === -1){
+                scene.getObjectByName(intersects[0].object.parent.name).rotation.set(0, 0, Math.PI);
             }
+            scene.getObjectByName(intersects[0].object.parent.name).visible = true;
+            updateHistory(Number(koma[4]),Number(koma[5]),turn,board);
+            board[Number(koma[4])][Number(koma[5])] = turn;
+            for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
+            turn = -1 * turn;
         }
     }
 }
