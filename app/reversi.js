@@ -2,7 +2,9 @@ window.addEventListener('DOMContentLoaded', init);
 
 
 function loop() {
-    requestAnimationFrame(loop);                        // loop 関数を繰り返す
+    alert("gamepad connected");
+    console.log("gamepad connected")
+    requestAnimationFrame(loop);                     // loop 関数を繰り返す
     var pad = navigator.getGamepads();                  // ゲームパッドの状態を取得
     // データの表示（1個めのゲームパッド（pad[0]）のみ表示）
     var log = document.getElementById("log");           // データ表示用の div 要素を取得
