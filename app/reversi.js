@@ -1,5 +1,38 @@
 window.addEventListener('DOMContentLoaded', init);
 
+
+function loop() {
+    requestAnimationFrame(loop);                        // loop 関数を繰り返す
+    var pad = navigator.getGamepads();                  // ゲームパッドの状態を取得
+    // データの表示（1個めのゲームパッド（pad[0]）のみ表示）
+    var log = document.getElementById("log");           // データ表示用の div 要素を取得
+    log.innerHTML = "a0: " + pad[0].axes[0] + "<br>"    // 左アナログ（横持ちで右が+、縦持ちで下が+）
+                  + "a1: " + pad[0].axes[1] + "<br>"    // 左アナログ（横持ちで下が+、縦持ちで左が+）
+                  + "a2: " + pad[0].axes[2] + "<br>"    // 右アナログ（横持ちで右が+、縦持ちで下が+）
+                  + "a3: " + pad[0].axes[3] + "<br>"    // 右アナログ（横持ちで下が+、縦持ちで左が+）
+                  // ボタンは .value で 0/1、.pressed で true/false が得られる
+                  + "b0: " + pad[0].buttons[0].value + "<br>"    // A
+                  + "b1: " + pad[0].buttons[1].value + "<br>"    // B
+                  + "b2: " + pad[0].buttons[2].value + "<br>"    // X
+                  + "b3: " + pad[0].buttons[3].value + "<br>"    // Y
+                  + "b4: " + pad[0].buttons[4].value + "<br>"    // L1
+                  + "b5: " + pad[0].buttons[5].value + "<br>"    // R1
+                  + "b6: " + pad[0].buttons[6].value + "<br>"    // L2
+                  + "b7: " + pad[0].buttons[7].value + "<br>"    // R2
+                  + "b8: " + pad[0].buttons[8].value + "<br>"    // Select
+                  + "b9: " + pad[0].buttons[9].value + "<br>"    // Start
+                  + "b10: " + pad[0].buttons[10].value + "<br>"  // L3
+                  + "b11: " + pad[0].buttons[11].value + "<br>"  // R3
+                  + "b12: " + pad[0].buttons[12].value + "<br>"  // 十字キー 上
+                  + "b13: " + pad[0].buttons[13].value + "<br>"  // 十字キー 下
+                  + "b14: " + pad[0].buttons[14].value + "<br>"  // 十字キー 左
+                  + "b15: " + pad[0].buttons[15].value + "<br>"  // 十字キー 右
+                  + "b16: " + pad[0].buttons[16].value + "<br>"; // Home
+}
+ 
+window.addEventListener("gamepadconnected", loop);  // ゲームパッドが接続されたら loop 開始
+if(window.ongamepadconnected) { loop(); }          // Chrome はイベントが起きないので直接 loop 開始
+
 const boardMap = {
     x:[-4,-3,-2,-1.2,1.2,2,3,4],
     z:[-4,-3,-2,-1.2,1.2,2,3,4],
