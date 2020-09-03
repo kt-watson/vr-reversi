@@ -100,7 +100,6 @@ function init() {
 }
 
 async function tick() {
-    requestAnimationFrame(tick);
     //駒をひっくり返すアニメーション
     if (reverseKomas.length > 0){
         for (const k of reverseKomas){
@@ -148,7 +147,8 @@ async function tick() {
             }
         }counter += 1
         }
-
+    requestAnimationFrame(tick);
+    console.log("tick looping")
 }
 //document.addEventListener( 'mousedown', clickPosition, false );
 
