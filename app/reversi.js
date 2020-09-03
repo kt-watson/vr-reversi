@@ -40,7 +40,7 @@ function init() {
 
     document.querySelector('a-scene').addEventListener('enter-vr', function(){
         console.log("enter VR mode");
-        tick();
+        //tick();
     });
 
     AFRAME.registerComponent('koma-listener', {
@@ -65,6 +65,11 @@ function init() {
                 board[Number(koma[4])][Number(koma[5])] = turn;
                 for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
                 turn = -1 * turn;
+
+                //loop処理開始
+                if(history.length ===1){
+                    tick();
+                }
             }
         });
     }
