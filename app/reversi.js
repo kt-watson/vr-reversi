@@ -33,11 +33,15 @@ let reverseKomas = [];
 let counter = 1;
 let gameFinished = false;
 
-let anmationFrame = requestAnimationFrame(tick);
 
 function init() {
 
     console.log("init start")
+
+    document.querySelector('a-scene').addEventListener('enter-vr', function(){
+        console.log("enter VR mode");
+        tick();
+    });
 
     AFRAME.registerComponent('koma-listener', {
         init: async function () {
