@@ -161,7 +161,7 @@ async function tick() {
             }
         }counter += 1
         }
-    requestAnimationFrame(tick);
+    window.requestAnimationFrame(tick);
     console.log("tick looping")
 }
 //document.addEventListener( 'mousedown', clickPosition, false );
