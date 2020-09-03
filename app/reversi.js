@@ -13,7 +13,7 @@ const turnInfo = {
 // シーンを取得
 const scene = document.querySelector('a-scene').object3D;
 
-let randomplayer = false;
+let randomplayer = true;
 
 let board = [
     [0,0,0,0,0,0,0,0],
@@ -36,21 +36,35 @@ let gameFinished = false;
 function init() {
 
     console.log("init start")
+
     AFRAME.registerComponent('koma-listener', {
-        init: function () {
-          this.el.addEventListener('click', function (evt) {
+        init: async function () {
+          this.el.addEventListener('click', async function (evt) {
             let komaId = evt.detail.intersection.object.el.id
             console.log('koma clicked at',komaId);
-            document.getElementById(komaId).object3D.visible = true;
-          });
-        }
-      });
-
+            let koma = document.getElementById(komaId).object3D.name;
+            reverseKomas = await searchReverseKoma(Number(koma[4]),Number(koma[5]),turn,board);
+            if (reverseKomas.length === 0){
+                //alert("そこには打てません");
+                evt.preventDefault();
+            }else{
+                if(turn === -1){
+                    scene.getObjectByName(komaId).rotation.set(0, 0, Math.PI);
+                }
+                scene.getObjectByName(komaId).visible = true;
+                updateHistory(Number(koma[4]),Number(koma[5]),turn,board);
+                board[Number(koma[4])][Number(koma[5])] = turn;
+                for(let k of reverseKomas) board[Number(k[4])][Number(k[5])] = turn;
+                turn = -1 * turn;
+            }
+        });
+    }
+    });
 
     for(let row = 0; row < 8; row++){
         for(let col = 0; col < 8; col++){
-            //aframeの要素として一度追加
             var koma = document.getElementById("koma" + row + col).object3D;
+            koma.name = "koma" + row + col;
             koma.scale.set(0.3, 0.3, 0.3);
             koma.position.set(boardMap.x[col], 0.7,boardMap.z[row]);
             if(board[row][col] === 0){
@@ -82,20 +96,20 @@ function init() {
       });
     }
   });
-
+  tick();
 }
 
 async function tick() {
-
+    requestAnimationFrame(tick);
     //駒をひっくり返すアニメーション
     if (reverseKomas.length > 0){
         for (const k of reverseKomas){
-            scene.getObjectByName(k).rotation.z += Math.PI / 30;
+            let koma = document.getElementById(k).object3D.rotation.z += Math.PI / 30;
             }
             if (counter === 30){
                 for(let row = 0; row < 8; row++){
                     for(let col = 0; col < 8; col++){
-                        let koma = scene.getObjectByName("koma" + row + col);
+                        let koma = document.getElementById("koma" + row + col).object3D;
                         if(board[row][col] === 1){
                             koma.rotation.set(0, 0, 0);
                         }
@@ -296,3 +310,11 @@ function countStone(turn){
     return board.map(x => x.filter(function(k){return k === turn}).length).reduce(reducer);
 }
 
+function updateHistory(row,col,turn,board){
+    let tmp = {};
+    tmp["x"] = col;
+    tmp["y"] = row;
+    tmp["turn"] = turn;
+    tmp["board"] = JSON.parse(JSON.stringify(board));
+    history.push(tmp);
+}
