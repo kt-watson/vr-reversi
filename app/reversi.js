@@ -33,6 +33,8 @@ let reverseKomas = [];
 let counter = 1;
 let gameFinished = false;
 
+let anmationFrame = requestAnimationFrame(tick);
+
 function init() {
 
     console.log("init start")
@@ -40,6 +42,9 @@ function init() {
     AFRAME.registerComponent('koma-listener', {
         init: async function () {
           this.el.addEventListener('click', async function (evt) {
+            //window.cancelAnimationFrame(anmationFrame);
+            //anmationFrame = requestAnimationFrame(tick);
+            
             let komaId = evt.detail.intersection.object.el.id
             console.log('koma clicked at',komaId);
             let koma = document.getElementById(komaId).object3D.name;
@@ -96,7 +101,7 @@ function init() {
       });
     }
   });
-  tick();
+  //tick();
 }
 
 async function tick() {
