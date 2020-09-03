@@ -68,7 +68,7 @@ function init() {
 
                 //loop処理開始
                 if(history.length ===1){
-                    tick();
+                    //tick();
                 }
             }
         });
@@ -110,6 +110,13 @@ function init() {
       });
     }
   });
+
+    // Component to change to a sequential color on click.
+      AFRAME.registerComponent('game-manager', {
+        tick: async function () {
+            tick();
+        }
+      });
   //tick();
 }
 
@@ -161,7 +168,7 @@ async function tick() {
             }
         }counter += 1
         }
-    window.requestAnimationFrame(tick);
+    //indow.requestAnimationFrame(tick);
     console.log("tick looping")
 }
 //document.addEventListener( 'mousedown', clickPosition, false );
